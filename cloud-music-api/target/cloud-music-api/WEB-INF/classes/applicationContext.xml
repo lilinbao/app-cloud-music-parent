@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-4.0.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+       http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.0.xsd">
+
+
+	<!-- 定时器开关 开始 <task:annotation-driven/> -->
+	<!-- 定时器开关 结束 -->
+	<!-- 标注类型 的事务配置 -->
+	<tx:annotation-driven />
+	<context:annotation-config />
+	<context:component-scan base-package="com.linbao.api"></context:component-scan>
+	<!-- 读取资源文件 -->
+
+	<context:property-placeholder location="classpath:application-context.properties" />
+	<!-- 加载其他模块配置文件 -->
+	<import resource="classpath:config/applicationContext-dao.xml" />
+	<import resource="classpath:config/applicationContext-service.xml" />
+	<import resource="classpath:config/applicationContext-logging.xml" />
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="url" value="${jdbc.url}" />
+	</bean>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl">update</prop>
+				<prop key="hibernate.format_sql">true</prop>
+			</props>
+		</property>
+		<property name="annotatedClasses">
+			<list>
+				<value>com.linbao.api.model.User</value>
+				<value>com.linbao.api.model.Art</value>
+				<value>com.linbao.api.model.Music</value>
+				<value>com.linbao.api.model.Floder</value>
+				<value>com.linbao.api.model.Credit</value>
+			</list>
+		</property>
+	</bean>
+	<!-- 事务配置 -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<aop:config>
+		<aop:pointcut
+			expression="execution(public * com.linbao.api.service.impl.*Impl.*(..))"
+			id="pointcut" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="pointcut" />
+	</aop:config>
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="query*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="is*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+
+
+	<aop:config>
+		<!-- 日志记录配置 -->
+		<aop:aspect id="userServiceAspect" ref="appServiceLog">
+			<aop:pointcut expression="execution(* com.linbao.api.service.*.*(..))"
+				id="userServicePointCut"></aop:pointcut>
+			<aop:before pointcut-ref="userServicePointCut" method="before"></aop:before>
+			<aop:after pointcut-ref="userServicePointCut" method="after"></aop:after>
+		</aop:aspect>
+		<!-- -->
+	</aop:config>
+
+	<!-- <aop:aspectj-autoproxy proxy-target-class="true"/> -->
+
+</beans>
