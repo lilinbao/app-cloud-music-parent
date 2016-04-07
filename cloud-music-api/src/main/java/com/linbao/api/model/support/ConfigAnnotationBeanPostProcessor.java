@@ -20,8 +20,8 @@ import org.springframework.util.ReflectionUtils;
 import com.linbao.api.inteface.Config;
 
 /**
+ * read config value from configuration file and set them to where the '@config' is placed
  * @author Linbao
- *
  */
 @Component("configAnnotationBeanPostProcessor")
 public class ConfigAnnotationBeanPostProcessor extends InstantiationAwareBeanPostProcessorAdapter {
@@ -40,11 +40,9 @@ public class ConfigAnnotationBeanPostProcessor extends InstantiationAwareBeanPos
 					if (Modifier.isStatic(field.getModifiers())) {
 						throw new IllegalStateException("@Config annotation is not supported on static fields");
 					}
-
 					// 如果开发者没有设置@Config的 value，则使用变量域的名称作为键查找配置资源
 					String key = cfg.value().length() <= 0 ? field.getName() : cfg.value();
 					Object value = propertyConfiger.getProperty(key);
-
 					if (value != null) {
 						// 转换配置值成其它非String类型
 						Object _value = typeConverter.convertIfNecessary(value, field.getType());
@@ -55,9 +53,7 @@ public class ConfigAnnotationBeanPostProcessor extends InstantiationAwareBeanPos
 				}
 			}
 		});
-
 		// 通常情况下返回true即可
 		return true;
 	}
-
 }
