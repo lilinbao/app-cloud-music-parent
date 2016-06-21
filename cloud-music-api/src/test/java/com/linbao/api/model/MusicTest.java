@@ -31,7 +31,7 @@ public class MusicTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+		ctx = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
 		sessionFactory = ctx.getBean("sessionFactory",SessionFactory.class);
 	}
 

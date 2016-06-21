@@ -1,0 +1,62 @@
+{
+  "required" : true,
+  "$schema" : "http://json-schema.org/draft-03/schema",
+  "type" : "object",
+  "title" : "User",
+  "description" : "User Entity Definition",
+  "properties" : {
+    "id":{
+      "types" : "number",
+      "required" : false
+    },
+    "username" : {
+      "type" : "string",
+      "required" : false
+    },
+    "email" : {
+      "type": "string",
+      "required" : false
+    },
+    "level" : {
+      "type" : "number",
+      "required" : false
+    },
+    "floders" : {
+      "type" : "array",
+      "required" : false,
+      "items" :{
+        "$ref" : "Folder"
+      }
+    },
+    "credit" : {
+      "type" : "object",
+      "required" : false,
+      "properties" : {
+        "id" : {
+          "type" : "number",
+          "required" : false
+        },
+        "name" : {
+          "type" : "string",
+          "required" : false
+        },
+        "creditAmount" : {
+          "type" : "number",
+          "required" : false
+        },
+        "createTime" : {
+          "type" : "string",
+          "required" : false
+        },
+        "effectedTime" : {
+          "type" : "string",
+          "required" : false
+        },
+        "endTime" : {
+          "type" : "string",
+          "required" : false
+        }
+      }
+    }
+  }
+}

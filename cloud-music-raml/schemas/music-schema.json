@@ -1,0 +1,58 @@
+{
+  "title" :"Music",
+  "description" : "Music Entity Definition",
+  "required" : true,
+  "$schema" : "http://json-schema.org/draft-03/schema",
+  "properties" : {
+    "id" : {
+      "type" : "integer",
+      "required" : true
+    },
+    "title" : {
+      "type" : "string",
+      "required" : true
+    },
+    "year" : {
+      "type" : "string",
+      "required" : false
+    },
+    "quantity" : {
+      "type" : "integer",
+      "required" : false
+    },
+    "location" : {
+      "type" : "string",
+      "required" : false
+    },
+    "art" : {
+      "type" : "object",
+      "required" : false,
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "required" : true
+        },
+        "name" : {
+          "type" : "string",
+          "required" : true
+        },
+        "sex" : {
+          "type": "string",
+          "required" : false
+        },
+        "type" : {
+          "required" : false,
+          "type" : "string"
+        },
+        "birthday" : {
+          "type" : "string",
+          "required" : false
+        },
+        "company" : {
+          "type" : "string",
+          "required" : false
+        }
+      }
+    }
+  }
+}

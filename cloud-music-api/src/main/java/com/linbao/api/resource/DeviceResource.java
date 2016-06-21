@@ -16,6 +16,8 @@ public class DeviceResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Device getDeviceByIp(@QueryParam("ip") String ip){
 		Device d = new Device(ip);
+		d.setIp("127.0.0.1");
+		d.setName("localhost");
 		return d;
 	}
 }

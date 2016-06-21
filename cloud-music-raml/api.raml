@@ -1,0 +1,177 @@
+#%RAML 1.0
+title: Cloud Music API
+version: v1
+baseUri: http://api.linbao.com/{version}/webapi
+mediaType: application/json
+documentation:
+  - title : Cloud Music API Document {version}
+    content : Access to the API
+schemas:
+  - User : !include schemas/user-schema.json
+  - Music : !include schemas/music-schema.json
+  - Folder : !include schemas/floder-schema.json
+securitySchemes:
+  - oauth_2 :
+      type: OAuth 2.0
+      description: Cloud Music uses OAuth2 security scheme only.
+      describedBy:
+        headers:
+          Authorization:
+            type: string
+            description: A valid authorization access token
+        responses:
+          401:
+            description: Bad or expired token
+          403:
+            description: Bad OAuth request
+      settings:
+        authorizationUri: http://api.linbao.com/{version}/webapi/auth
+        accessTokenUri: http://api.linbao.com/{version}/webapi/token
+        authorizationGrants: [credentials]
+resourceTypes:
+  - uriParameter:
+     uriParameters:
+       <<property>> :
+         displayName: <<property>>
+         description: Uri parameter, path parameter start with <<start_with>> will take the call into this method
+         type: string
+     get:
+       responses:
+         200:
+           body:
+             application/json:
+               schema: <<schema>>
+
+  - single :
+      usage : This resourceType should be used for any single object
+      description: Resource interface of <<schema>>
+      post:
+        is: [secured]
+        securedBy: [oauth_2]
+        displayName: POST
+        body:
+          multipart/form-data:
+            schema: <<schema>>
+        responses:
+          201:
+            body:
+              application/json:
+          400:
+            body:
+              application/json:
+      put:
+        is: [secured]
+        securedBy: [oauth_2]
+        displayName: PUT
+        description: To edit or update a <<schema>>
+        body:
+           multipart/form-data:
+             schema: <<schema>>
+      delete:
+         is: [secured]
+         securedBy: [oauth_2]
+         displayName: DELETE
+         description: Delete a <<schema>> by given id
+         queryParameters:
+           id : {
+             type: string,
+             required: true,
+             description: The identification of <<schema>>
+             }
+         responses:
+           200:
+             body:
+               application/json:
+                 example: |
+                   {
+                    "status" : "ok",
+                    "message" : "success"
+                   }
+      get:
+        displayName: GET
+        description: Get <<schema>> object
+        queryParameters:
+           id : {
+             type: string,
+             required: true,
+             displayName: id,
+             description: The identification of the <<schema>>
+             }
+  - collection :
+      is: [paged]
+      usage: This resourceType should be used for any collection of items
+      description: The collection of <<schema>>
+      get:
+        description: get collection of <<schema>>
+        responses:
+           200:
+             body:
+               application/json:
+                 schema: <<schema>>
+                 example: |
+                   {
+                    "id" : "123",
+                    "username" : "linbao",
+                    "birthday" : "19890622"
+                   }
+  - searchableCollection:
+      is: [paged]
+      usage: Those who need to additional query parameters
+      displayName: Searchable Collection Resource Type
+      description: Return <<resourcePathName>> that have their <<queryParamName>> matching the given value
+      get:
+        queryParameters:
+          <<queryParamName>>:
+            type: string
+            required: false
+        responses:
+          200:
+            body:
+              application/json:
+                schema: <<schema>>
+traits:
+  - secured :
+     usage: This trait should apply to those POST or PUT methods
+     displayName: Secured
+     description: This requests require authentication
+     headers:
+       access_token :
+         type: string
+  - paged:
+      usage: This trait can be use in paging situation
+      displayName: Paged
+      description: Specify the page that you want to retrieve
+      queryParameters:
+        page:
+          type: integer
+          required: false
+          description: The page to be requested
+          default: 1
+        limit:
+          type: integer
+          required: false
+          description: The number of items per page
+          default: 10
+/users :
+  type: { single: {schema : User} }
+  /list:
+    type: { collection: {schema : User} }
+  /search :
+    type: { searchableCollection: {queryParamName : name, schema : User} }
+  /{id}:
+    type: { uriParameter: {property : id, start_with: any numberic, schema : User} }
+/musics :
+  type: { single: {schema : Music} }
+  /list:
+    type: { collection: {schema : Music} }
+  /search:
+    type: { searchableCollection: {queryParamName : title, schema : Music} }
+  /{id:m\d{3,5}}:
+    type: { uriParameter: {property : id, start_with: m, schema : Music} }
+  /{art:a\d{3,5}}:
+    type: { uriParameter: {property : art, start_with: a, schema : Music} }
+  /{year:y\d{3,5}}:
+    type: { uriParameter: {property : year, start_with: y, schema : Music} }
+  /{style:s\d?}:
+    type: { uriParameter: {property : style, start_with: s, schema : User} }
+/playLists :

@@ -26,7 +26,7 @@ public class HibernateSchemaExportTest {
 	@BeforeClass
 	public static void beforeClass(){
 		@SuppressWarnings("resource")
-		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
 		localSessionFactory = (LocalSessionFactoryBean) ctx.getBean("&sessionFactory");
 	}
 	@Test

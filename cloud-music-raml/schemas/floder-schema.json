@@ -1,0 +1,21 @@
+{
+  "title" : "Floder",
+  "description" : "Floder Entity Definition",
+  "required" : true,
+  "$schema" : "http://json-schema.org/draft-03/schema",
+  "type" : "object",
+  "properties" : {
+    "id" : {
+      "type" : "integer",
+      "required" : true
+    },
+    "displayName" : {
+      "type" : "string",
+      "required" : true
+    },
+    "path" : {
+      "type": " string",
+      "required" : false
+    }
+  }
+}
