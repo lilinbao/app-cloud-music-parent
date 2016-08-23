@@ -8,7 +8,6 @@
 	<packaging>war</packaging>
 	<version>1.0-SNAPSHOT</version>
 	<name>cloud-music-api</name>
-
 	<build>
 		<finalName>cloud-music-api</finalName>
 		<plugins>
@@ -62,6 +61,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>

@@ -1,4 +1,4 @@
-package com.linbao.cloud_music_ui;
+package com.linbao;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
