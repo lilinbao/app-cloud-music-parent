@@ -29,13 +29,14 @@ public class HibernateSchemaExportTest {
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
 		localSessionFactory = (LocalSessionFactoryBean) ctx.getBean("&sessionFactory");
 	}
-	@Test
+	//@Test//This test should be commented during any package
 	public void testSchemaEcport(){
 		
 		Configuration conf = localSessionFactory.getConfiguration();
 		new SchemaExport(conf).create(true,true);
 		//new SchemaExport(conf).drop(true, true);
 	}
+	
 	@AfterClass
 	public static void destroy(){
 		localSessionFactory.destroy();

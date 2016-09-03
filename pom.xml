@@ -16,7 +16,7 @@
 		<aspectj.version>1.7.0</aspectj.version>
 		<commons-lang3.version>3.3.2</commons-lang3.version>
 		<guava.version>17.0</guava.version>
-		<h2.version>1.3.176</h2.version>
+		<h2.version>1.4.191</h2.version>
 		<hibernate-validator.version>5.0.3.Final</hibernate-validator.version>
 		<hibernate.version>4.3.5.Final</hibernate.version>
 		<jackson.version>1.9.13</jackson.version>
@@ -36,10 +36,12 @@
 		<spring.security.version>4.0.4.RELEASE</spring.security.version>
 		<spring.version>4.2.3.RELEASE</spring.version>
 		<tomcat-jdbc.version>7.0.53</tomcat-jdbc.version>
+		<thetransactioncompany.vesion>2.4</thetransactioncompany.vesion>
 		
 		<!-- 项目属性 -->
-		<!-- <jdbc.driver.groupId>com.h2database</jdbc.driver.groupId> <jdbc.driver.artifactId>h2</jdbc.driver.artifactId> 
-			<jdbc.driver.version>${h2.version}</jdbc.driver.version> -->
+		<!-- <jdbc.driver.groupId>com.h2database</jdbc.driver.groupId>
+		<jdbc.driver.artifactId>h2</jdbc.driver.artifactId> 
+		<jdbc.driver.version>${h2.version}</jdbc.driver.version> -->
 
 		<jdbc.driver.groupId>mysql</jdbc.driver.groupId>
 		<jdbc.driver.artifactId>mysql-connector-java</jdbc.driver.artifactId>
@@ -66,6 +68,11 @@
 				<groupId>org.glassfish.jersey.ext</groupId>
 				<artifactId>jersey-spring3</artifactId>
 				<version>${jersey.version}</version>
+			</dependency>
+			<dependency>
+				 <groupId>com.thetransactioncompany</groupId>
+				 <artifactId>cors-filter</artifactId>
+				 <version>${thetransactioncompany.vesion}</version>
 			</dependency>
 			<!-- uncomment this to get JSON support <dependency> <groupId>org.glassfish.jersey.media</groupId> 
 				<artifactId>jersey-media-moxy</artifactId> </dependency> -->
@@ -166,6 +173,12 @@
 				<artifactId>${jdbc.driver.artifactId}</artifactId>
 				<version>${jdbc.driver.version}</version>
 				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+    			<groupId>com.h2database</groupId>
+    			<artifactId>h2</artifactId>
+    			<version>${h2.version}</version>
+    			<scope>test</scope>
 			</dependency>
 			<!-- GENERAL UTILS begin -->
 			<dependency>
