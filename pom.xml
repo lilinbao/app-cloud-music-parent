@@ -36,6 +36,7 @@
 		<spring.security.version>4.0.4.RELEASE</spring.security.version>
 		<spring.version>4.2.3.RELEASE</spring.version>
 		<tomcat-jdbc.version>7.0.53</tomcat-jdbc.version>
+		<thetransactioncompany.vesion>2.4</thetransactioncompany.vesion>
 		
 		<!-- 项目属性 -->
 		<!-- <jdbc.driver.groupId>com.h2database</jdbc.driver.groupId> <jdbc.driver.artifactId>h2</jdbc.driver.artifactId> 
@@ -66,6 +67,11 @@
 				<groupId>org.glassfish.jersey.ext</groupId>
 				<artifactId>jersey-spring3</artifactId>
 				<version>${jersey.version}</version>
+			</dependency>
+			<dependency>
+				 <groupId>com.thetransactioncompany</groupId>
+				 <artifactId>cors-filter</artifactId>
+				 <version>${thetransactioncompany.vesion}</version>
 			</dependency>
 			<!-- uncomment this to get JSON support <dependency> <groupId>org.glassfish.jersey.media</groupId> 
 				<artifactId>jersey-media-moxy</artifactId> </dependency> -->
