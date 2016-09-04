@@ -33,10 +33,6 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<dependency>
-    			<groupId>com.h2database</groupId>
-    			<artifactId>h2</artifactId>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -46,6 +42,11 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+    			<groupId>com.h2database</groupId>
+    			<artifactId>h2</artifactId>
+    			<scope>test</scope>
+			</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet-core</artifactId>

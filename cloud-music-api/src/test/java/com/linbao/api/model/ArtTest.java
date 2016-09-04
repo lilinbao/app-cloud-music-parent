@@ -5,38 +5,44 @@
  */
 package com.linbao.api.model;
 
+import static org.junit.Assert.assertEquals;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.junit.Before;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.junit.Rule;
+import org.junit.Test;
+
+import com.linbao.api.SessionFactoryRule;
 
 /**
  * @author Linbao
  *
  */
 public class ArtTest {
+	
+	@Rule
+	public SessionFactoryRule sfr = new SessionFactoryRule(new Object[]{new Art(), new Music()});
+	
 	private static final String[] NAMES = {"Linbao","Lishen","Eason"};
 	private static final String[] COMPANYS = {"Rock Company","HuaYi Brother Company","LL Company"};
 	private static final String[] TYPES = {"Popular","Classical","General"};
 	private static final String[] TITLES = {"My Love","Season In The Sun","Huan Huan"};
-	private ApplicationContext ctx;
-	private SessionFactory sessionFactory;
+	
 	private Session session;
 
 	@Before
 	public void setUp() throws Exception {
-		ctx = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
-		sessionFactory = ctx.getBean("sessionFactory",SessionFactory.class);
+		session= sfr.getSession();
 	}
 
+	@Test
 	public void testSaveArt() {
-		session = sessionFactory.openSession();
+		sfr.beginTransation();
 		List<Art> arts = createArt(NAMES,COMPANYS,TYPES);
 		for(Art a : arts){
 			session.save(a);
@@ -44,8 +50,10 @@ public class ArtTest {
 			for(Music m : musics){
 				session.save(m);
 			}
-			session.beginTransaction().commit();
 		}
+		sfr.commit();
+		assertEquals(NAMES.length, session.createQuery("from Art").list().size());
+		
 	}
 	
 	private List<Art> createArt(final String[] name, final String[] company, final String[] type){
