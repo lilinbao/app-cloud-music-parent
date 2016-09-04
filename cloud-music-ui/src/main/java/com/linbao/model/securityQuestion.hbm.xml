@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.llb.model">
+
+	<class name="SecurityQuestion" table="tb_securityQuestion">
+		<id name="id" column="id"	>
+			<generator class="native"></generator>
+		</id>
+		<property name="question" column="question"></property>
+		<property name="answer" column="answer"></property>
+		<many-to-one name="userId" class="com.llb.model.User" update="false" insert="false">
+			<column name="userId"></column>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

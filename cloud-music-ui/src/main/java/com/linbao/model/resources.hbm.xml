@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.llb.model">
+
+	<class name="Resources" table="tb_resources">
+		<id name="id" column="id"	>
+			<generator class="native"></generator>
+		</id>
+		<property name="name" column="name"></property>
+		<property name="url" column="url"></property>
+		<property name="isLeaf" column="isLeaf"></property>
+		<property name="type" column="type"></property>
+		<property name="description" column="description"></property>
+		<many-to-one name="parent" class="com.llb.model.Resources">
+			<column name="parent"></column>
+		</many-to-one>
+		<set name="roles" table="tb_role_resources">
+			<key column="resourcesId" />
+			<many-to-many class="com.llb.model.Role">
+				<column name="roleId"></column>
+			</many-to-many>
+		</set>
+		
+	</class>
+</hibernate-mapping>

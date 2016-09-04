@@ -25,6 +25,7 @@
 		<jetty.version>7.6.15.v20140411</jetty.version>
 		<junit.version>4.11</junit.version>
 		<logback.version>1.1.2</logback.version>
+		<mail.version>1.4.7</mail.version>
 		<mockito.version>1.9.5</mockito.version>
 		<selenium.version>2.42.2</selenium.version>
 		<servlet.version>2.5</servlet.version>
@@ -235,6 +236,11 @@
 				<version>${mockito.version}</version>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+    	    <groupId>javax.mail</groupId>
+    	    <artifactId>mail</artifactId>
+    	    <version>${mail.version}</version>
+    	</dependency>
 		</dependencies>
 	</dependencyManagement>
 
