@@ -42,8 +42,8 @@
   			<finalName>${project.name}-${project.version}</finalName>
   			<resources>
   				<resource>
-  					<directory>src/main/java/resources/dev</directory>
-  					<targetPath>configurations</targetPath>
+  					<directory>src/main/resources/config/dev</directory>
+  					<targetPath>config</targetPath>
   				</resource>
   			</resources>
   			<plugins>
@@ -60,7 +60,7 @@
   		</build>
   	</profile>
   	<profile>
-  		<id>production</id>
+  		<id>prod</id>
   		<activation>
   			<property>
   				<name>env</name>
@@ -72,8 +72,8 @@
   			<finalName>${project.name}</finalName>
   			<resources>
   				<resource>
-  					<directory>src/main/java/resources/prod</directory>
-  					<targetPath>configurations</targetPath>
+  					<directory>src/main/resources/config/prod</directory>
+  					<targetPath>config</targetPath>
   				</resource>
   			</resources>
   			<plugins>
