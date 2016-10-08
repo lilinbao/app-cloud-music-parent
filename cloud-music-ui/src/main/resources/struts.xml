@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<!-- 开启使用开发模式，详细错误提示 -->
+    <constant name="struts.devMode" value="true" />
+    <!-- 将对象交给spring管理 -->
+    <constant name="struts.objectFactory" value="spring" />
+    <!-- 指定每次请求到达，重新加载资源文件-->
+    <constant name="struts.i18n.reload" value="false" /> 
+    <!-- 指定每次配置文件更改后，自动重新加载 
+    <constant name="struts.configuration.xml.reload" value="true" />-->
+    <!-- 国际化资源文件 -->
+    <constant name="struts.custom.i18n.resources" value="appText" />
+    <!-- 默认后缀名
+    <constant name="struts.action.extension" value="action,do" /> -->
+    <!-- 页面统一编码 -->
+    <constant name="struts.i18n.encoding" value="UTF-8"></constant>
+    <!-- all struts constant has been move to struts.properties , please refer -->
+    <!-- <include file="strutsConfig/derrick-interceptor-stack.xml"></include> -->
+    <bean type="org.apache.struts2.dispatcher.multipart.MultiPartRequest" name="derrick" class="com.linbao.base.impl.DerrickMultiPartRequest" scope="default" />
+    <constant name="struts.multipart.parser" value="derrick" />
+    <package name="default" extends="struts-default" namespace="/">
+        <interceptors>
+	        <interceptor name="baseInterceptor" class="baseInterceptor" />
+	        <interceptor name="authroizationInterceptor" class="authroizationInterceptor"></interceptor>
+	        <interceptor-stack name="myInterceptorStack">
+	            <interceptor-ref name="baseInterceptor" />
+	            <interceptor-ref name="authroizationInterceptor" />
+	            <interceptor-ref name="defaultStack" />
+	        </interceptor-stack>
+	        <interceptor-stack name="imageUploadStack">
+	            <interceptor-ref name="authroizationInterceptor" />
+	            <interceptor-ref name="fileUpload">
+	                <param name="allowedTypes">
+	                    image/bmp,image/png,image/gif,image/jpeg,image/pjpeg,image/x-png
+                 	</param>
+                 	<param name="maximumSize">5242880</param><!-- 50M -->
+	            </interceptor-ref>
+	            <interceptor-ref name="defaultStack" />
+	        </interceptor-stack>
+	        <interceptor-stack name="attachedUploadStack">
+	            <interceptor-ref name="authroizationInterceptor" />
+	            <interceptor-ref name="fileUpload">
+	                <param name="allowedTypes">
+	                    application/octet-stream,application/zip,application/x-zip-compressed,application/x-rar-compressed
+                 	</param>
+                 	<param name="maximumSize">209715200</param><!-- 200M -->
+                 </interceptor-ref>
+                 <interceptor-ref name="defaultStack" />
+	        </interceptor-stack>
+	    </interceptors>
+	    
+	    <default-action-ref name="notFound" />
+	   <global-results>
+	        <result name="sql">error-500.html</result>
+	        <result name="authError">error-404.html</result>
+	        <result name="methodNotFound">uses/error-404.html</result>
+	        <result name="error">error-500.html</result>
+	    </global-results>
+	    <global-exception-mappings>
+	        <exception-mapping result="sql" exception="java.sql.SQLException" />
+	        <exception-mapping result="authError" exception="com.llb.exception.AuthorizationException"></exception-mapping>
+	        <exception-mapping result="methodNotFound" exception="java.lang.NoSuchMethodException"></exception-mapping>
+	        <exception-mapping result="error" exception="java.lang.Exception"></exception-mapping>
+	    </global-exception-mappings>
+	     
+	    <action name="notFound" class="notFoundAction">
+	        <result name="success">error-404.html</result>
+	    </action>
+    </package>
+	<package name="backstage" extends="default" namespace="/admin">
+	    <action name="login" class="userAction" method="login">
+	        <interceptor-ref name="defaultStack"></interceptor-ref>
+	        <result name="success">index.jsp</result>
+	        <result name="input">login.jsp?${parameters}</result>
+	    </action>
+	    <action name="logout" class="userAction" method="logout">
+	        <result name="input">login.jsp</result>
+	    </action>
+		<action name="user_*" class="userAction" method="{1}">
+			<result name="input">login.jsp?${parameters}</result>
+			<result name="error">error-500.html</result>
+			<result name="reset">resetPwd.jsp</result>
+			<result name="empty">login.jsp?userEmail=nofound</result>
+			<result name="list">users/list.jsp</result>
+			<result name="edit">users/edit.jsp</result>
+			<result name="add">users/add.jsp</result>
+			<result name="attrResources">slider.jsp</result>
+			<interceptor-ref name="myInterceptorStack"></interceptor-ref>
+			<exception-mapping result="list" exception="org.hibernate.NonUniqueObjectException" />
+		</action>
+		<action name="fileuploadform" class="fileUploadFormAction" method="form">
+		    <result name="success">form.jsp</result>
+		    <result name="input">form.jsp</result>
+		    <result name="error">form.jsp</result>
+		    <result name="login">uform.jsp</result>
+		    <result name="none">form.jsp</result>
+		</action>
+		<action name="upload" class="fileUploadAction" method="upload" >
+		    <result name="input">upload/form.jsp</result>
+		    <result>form.jsp</result>
+		    <result name="input">form.jsp</result>
+		    <result name="error">error.jsp</result>
+		    <result name="decline" type="redirect">login.jsp</result>
+		    <!-- <exception-mapping result="error" exception="java.io.FileNotFoundException" /> -->
+		</action>
+		<action name="imgupload" class="fileUploadAction" method="imgupload" >
+		    <interceptor-ref name="imageUploadStack" />
+		    <result>form.jsp</result>
+		    <result name="input">form.jsp</result>
+		    <result name="error">error.jsp</result>
+		    <result name="decline">login.jsp</result>
+		    <!-- <exception-mapping result="error" exception="java.io.FileNotFoundException" /> -->
+		</action>
+		<action name="fileupload" class="fileUploadAction" method="fileupload" >
+		    <interceptor-ref name="attachedUploadStack" />
+		    <result>form.jsp</result>
+		    <result name="input">form.jsp</result>
+		    <result name="error">error.jsp</result>
+		    <result name="decline">login.jsp</result>
+		    <!-- <exception-mapping result="error" exception="java.io.FileNotFoundException" /> -->
+		</action>
+		<action name="fileuploadstatus" class="fileUploadAction" method="uploadStatus" />
+		
+	</package>
+	
+</struts>    

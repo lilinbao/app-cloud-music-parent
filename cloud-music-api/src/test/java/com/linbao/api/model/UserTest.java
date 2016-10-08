@@ -6,14 +6,15 @@
  */
 package com.linbao.api.model;
 
+import static org.junit.Assert.assertEquals;
+
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.linbao.api.SessionFactoryRule;
 
 /**
  * @author Linbao
@@ -21,11 +22,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class UserTest {
 
+	@Rule
+	public SessionFactoryRule sfr = new SessionFactoryRule(new Object[]{new User(), new Floder(), new Credit()});
 	private static final String EMAIL = "Linbaolee@gmail.com";
 	private static final String USER_NAME = "linbao";
-	private static final String PASSWORD = "123";
-	private ApplicationContext ctx;
-	private SessionFactory sessionFactory;
+	//private static final String PASSWORD = "123";
 	private Session session;
 
 	/**
@@ -35,25 +36,26 @@ public class UserTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		ctx = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
-		sessionFactory = ctx.getBean("sessionFactory",SessionFactory.class);
+		session = sfr.getSession();
 	}
 
 	@Test
 	public void testSave() {
+		sfr.beginTransation();
 		User u = new User();
 		u.setEmail(EMAIL);
 		u.setLevel(1.0);
 		u.setNickName(USER_NAME);
 		u.setUsername(USER_NAME);
-		session = sessionFactory.openSession();
 		session.save(u);
-		session.beginTransaction().commit();
+		sfr.commit();
+		
+		assertEquals(1, session.createQuery("from User").list().size());
 	}
 	
 	@After
 	public void after(){
-		session.close();
+		
 	}
 
 }
